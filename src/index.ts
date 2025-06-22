@@ -1,29 +1,11 @@
-import { Command } from 'commander';
-import chalk from 'chalk';
-import inquirer from 'inquirer';
+import { program } from "./core.js";
+import { buildRemoveUnselectedImg } from "./remove-unselected-img/index.js";
 
-const program = new Command();
+main();
 
-program
-  .name('my-script')
-  .description('A sample CLI using commander, chalk, and inquirer')
-  .version('1.0.0');
+// This function can be used to register commands or perform initial setup
+function main() {
+  buildRemoveUnselectedImg(program);
 
-program
-  .command('greet')
-  .description('Greet a user')
-  .action(async () => {
-    const { name } = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'name',
-        message: 'What is your name?',
-      },
-    ]);
-    console.log(chalk.green(`Hello, ${name}!`));
-  });
-
-program.parse(process.argv);
-
-// Entry point for your TypeScript scripts
-console.log('Hello from TypeScript!');
+  program.parse(process.argv);
+}
