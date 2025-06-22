@@ -1,9 +1,9 @@
-import { runRemoveUnselectedImgByComparingTargetDirAndSourceDir } from "../index.js";
+import { removeUnselectedImgByComparingTargetAndSourceDir } from "../removeUnselectedImgByComparingTargetAndSourceDir.js";
 import fs from "fs-extra";
 import inquirer from "inquirer";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 
-describe("runRemoveUnselectedImgByComparingTargetDirAndSourceDir", () => {
+describe("removeUnselectedImgByComparingTargetAndSourceDir", () => {
   const targetDir = "__test_target__";
   const sourceDir = "__test_source__";
 
@@ -27,7 +27,7 @@ describe("runRemoveUnselectedImgByComparingTargetDirAndSourceDir", () => {
 
   it("removes files in targetDir that are not in sourceDir", async () => {
     vi.spyOn(inquirer, "prompt").mockResolvedValueOnce({ shouldRemove: true });
-    await runRemoveUnselectedImgByComparingTargetDirAndSourceDir(
+    await removeUnselectedImgByComparingTargetAndSourceDir(
       targetDir,
       sourceDir
     );
@@ -38,7 +38,7 @@ describe("runRemoveUnselectedImgByComparingTargetDirAndSourceDir", () => {
 
   it("does not remove files if user cancels", async () => {
     vi.spyOn(inquirer, "prompt").mockResolvedValueOnce({ shouldRemove: false });
-    await runRemoveUnselectedImgByComparingTargetDirAndSourceDir(
+    await removeUnselectedImgByComparingTargetAndSourceDir(
       targetDir,
       sourceDir
     );
