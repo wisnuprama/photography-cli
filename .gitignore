@@ -1,0 +1,34 @@
+# Node modules
+node_modules/
+
+# TypeScript build output
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*
+
+# VSCode settings
+.vscode/
+
+# Mac system files
+.DS_Store
+
+# Output from tsc
+*.js
+*.js.map
+
+# Misc
+coverage/
+
+# Ignore compiled output in src (if any)
+src/**/*.js
+src/**/*.js.map
