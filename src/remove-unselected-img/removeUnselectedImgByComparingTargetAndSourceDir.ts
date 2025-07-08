@@ -14,16 +14,19 @@ export async function removeUnselectedImgByComparingTargetAndSourceDir(
 
   const sourceFiles = fs.readdirSync(sourceDir);
   Log.info(
-    `Found ${sourceFiles.length} files in source directory. Ingoring dupicates from different extensions...`
+    `Found ${sourceFiles.length} files in source directory. Ingoring duplicates from different extensions...`
   );
 
-  const sourceFileNames = new Set(sourceFiles.map((file) => file));
-  Log.info(`Source file names: ${Array.from(sourceFileNames).join(", ")}`);
+  Log.info(`Source file names: ${sourceFiles.join(", ")}`);
+
+  const selectedFiles = processSourceFiles(sourceFiles);
+
+  Log.info(`Selected file names: ${Array.from(selectedFiles).join(", ")}`);
 
   const targetFiles = fs.readdirSync(targetDir);
   Log.info(`Found ${targetFiles.length} files in target directory.`);
   const unselectedFiles = targetFiles.filter(
-    (file) => !sourceFileNames.has(file)
+    (file) => !selectedFiles.has(file)
   );
   Log.info(
     `Found ${
@@ -51,4 +54,42 @@ export async function removeUnselectedImgByComparingTargetAndSourceDir(
   });
 
   Log.info("Unselected images removed successfully.");
+}
+
+function processSourceFiles(fileNames: string[]): Set<string> {
+  // Define the image file extensions to be considered for removal and to be kept.
+  // This list only includes extensions used by the same image (e.g, "A7C123123.ARW" and "A7C123123.jpg").
+  // This can be extended as needed
+  // Note: The extensions are case-sensitive, so ensure they match the actual file names.
+  const imgExtensions = [
+    ".jpg",
+    ".jpeg",
+    ".heic",
+    ".heif",
+    ".ARW",
+    ".tiff",
+    ".dng",
+    ".xmp",
+  ];
+
+  // Process file names to remove duplicates based on the base name
+  const processedNames = new Set<string>();
+
+  for (let i = 0; i < fileNames.length; i++) {
+    const fileName = fileNames[i];
+    processedNames.add(fileName);
+
+    const baseName = fileName.split(".")[0];
+    for (let j = 0; j < imgExtensions.length; j++) {
+      const ext = imgExtensions[j];
+      const relatedFileName = `${baseName}${ext}`;
+      if (fileName === relatedFileName) {
+        continue; // Skip if the file name already matches the extension
+      }
+      // Add the related file name with the specific extension
+      processedNames.add(relatedFileName);
+    }
+  }
+
+  return processedNames;
 }
